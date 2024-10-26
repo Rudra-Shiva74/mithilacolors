@@ -1,0 +1,88 @@
+.clothingForm {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #f61c1c;
+  border-radius: 8px;
+  background-color: #ec1313;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+}
+
+.ram {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 35px;
+  color: #eadd51;
+}
+
+.formGroup {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  margin-bottom: 10px;
+  font-weight: bold;
+  font-size: 16px;
+  color: #fff;
+}
+
+select {
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.submitButton {
+  padding: 12px;
+  background-color: #d8ed4c;
+  color: white;
+  font-size: 18px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 10px;
+  box-sizing: border-box;
+}
+
+.submitButton:hover {
+  background-color: #00b30f;
+}
+
+@media (max-width: 768px) {
+  .clothingForm {
+    padding: 15px;
+  }
+
+  label {
+    font-size: 14px;
+  }
+
+  select,
+  .submitButton {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .clothingForm {
+    padding: 10px;
+  }
+
+  select,
+  .submitButton {
+    font-size: 12px;
+  }
+
+  .submitButton {
+    padding: 10px;
+  }
+}

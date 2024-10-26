@@ -1,0 +1,48 @@
+/* Navbar.css */
+.nav
+/* Styles for Sidebar */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -250px; /* Hide sidebar initially */
+  width: 250px;
+  height: 100%;
+  background-color: #f8f9fa; /* Background color */
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+  transition: left 0.3s ease; /* Animation for sliding */
+  z-index: 1000;
+}
+
+.sidebar.open {
+  left: 0; /* Show sidebar when open */
+}
+
+.sidebar-nav {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-nav .nav-item {
+  padding: 15px 20px; /* Padding for each nav item */
+}
+
+.sidebar-nav .nav-link {
+  text-decoration: none;
+  color: #333; /* Link color */
+}
+
+.sidebar-nav .nav-link:hover {
+  background-color: #e9ecef; /* Hover effect */
+}
+
+/* Hide desktop navbar in mobile view */
+@media (max-width: 992px) {
+  .navbar {
+    display: none;
+  }
+}
+.nav-item.dropdown:hover .dropdown-menu {
+  display: block;
+  margin-top: 0; /* Adjusts the dropdown appearance */
+}

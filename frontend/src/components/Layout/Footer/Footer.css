@@ -1,0 +1,47 @@
+.footer {
+  background-color: #ebda56; /* Light background color */
+  padding: 20px 0;
+  margin-top: 50px;
+  position: relative;
+  bottom: 0;
+  width: 100%;
+}
+
+.footer .container {
+  max-width: 1200px;
+  margin: auto;
+}
+
+.footer h5 {
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #333; /* Change color of section headings */
+}
+
+.footer ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.footer ul li {
+  margin-bottom: 10px;
+}
+
+.footer a {
+  text-decoration: none;
+  color: #333; /* Change text color for all links */
+  /* font-weight: bold; Make links bold if needed */
+}
+
+.footer a:hover {
+  text-decoration: underline;
+  color: #ff5733; /* Change color on hover */
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .footer .row {
+    flex-direction: column;
+    text-align: center;
+  }
+}

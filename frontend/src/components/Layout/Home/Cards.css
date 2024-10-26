@@ -1,0 +1,35 @@
+.card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Add smooth transition */
+}
+
+.card:hover {
+  transform: scale(1.05); /* Slightly increase card size on hover */
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.15); /* Add shadow on hover for depth */
+}
+
+.custom-height {
+  height: 250px; /* Set a fixed height for the image */
+  object-fit: cover; /* Ensure image fits nicely within the container */
+  border-radius: 5px;
+}
+
+.card-body {
+  padding: 15px;
+}
+
+.card-footer {
+  text-align: center;
+}
+
+.btn {
+  width: 100%;
+}
+
+.btn-primary {
+  background-color: #d8ed4c;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #00b30f; /* Darker blue on hover */
+}

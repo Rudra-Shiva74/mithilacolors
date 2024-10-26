@@ -1,0 +1,15 @@
+.slider-img {
+  height: 500px; /* Aap yahan height set kar sakte hain */
+  object-fit: cover; /* Yeh ensures karega ki images crop na ho */
+}
+@media (max-width: 768px) {
+  .slider-img {
+    height: 300px; /* Mobile par chhoti height */
+  }
+}
+
+@media (min-width: 769px) {
+  .slider-img {
+    height: 600px; /* Desktop par badi height */
+  }
+}

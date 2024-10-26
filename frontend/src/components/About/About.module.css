@@ -1,0 +1,82 @@
+/* About.module.css */
+
+.container {
+  padding: 40px;
+  max-width: 1400px;
+  margin: 0 auto;
+  font-family: "Arial", sans-serif;
+  background: linear-gradient(to right, #f7f7f7, #f7ed32);
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+.section {
+  margin-bottom: 30px;
+  transition: transform 0.2s;
+}
+
+.section:hover {
+  transform: scale(1.02);
+}
+
+.section h2 {
+  cursor: pointer;
+  color: #007bff;
+  margin: 10px 0;
+  padding: 15px;
+  border: 1px solid #007bff;
+  border-radius: 8px;
+  transition: background-color 0.3s, color 0.3s;
+  font-size: 1.5rem;
+}
+
+.section h2:hover {
+  background-color: #deec3e;
+  color: #fff;
+}
+
+.section p {
+  margin: 10px 0;
+  line-height: 1.6;
+  color: #555;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.section ul {
+  padding-left: 20px; /* Indent for list items */
+  margin: 10px 0;
+}
+
+.section li {
+  margin: 5px 0;
+  color: #555; /* Consistent color for list items */
+}
+
+@media (max-width: 600px) {
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  .section h2 {
+    font-size: 1.4rem;
+  }
+
+  .section p {
+    font-size: 0.9rem;
+  }
+
+  .section li {
+    font-size: 0.9rem; /* Adjust list item font size for mobile */
+  }
+}
