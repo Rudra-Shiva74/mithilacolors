@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "../Admin/UserList.module.css"; // Import the CSS module
 import axios from "axios";
+import { isUserLogin } from "../Auth/Logincheck";
 
 const Addtocart = () => {
   // State to store the list of cart
@@ -15,22 +16,22 @@ const Addtocart = () => {
   const fetchUsers = async () => {
     const resp = await axios.get(`http://localhost:8000/api/addtocard`);
     setCart(resp.data);
+    console.log(resp.data);
   };
 
-  // Edit user handler
-  const handleEdit = (userId) => {
-    console.log(`Editing user with ID: ${userId}`);
-    // Logic to edit the user
-  };
+  const removeProduct = async (pid) => {
+    const caart = { pid, email: isUserLogin().email }
+    console.log(caart)
+    const resp = await axios.post(`http://localhost:8000/api/removetocard`, 
+      {caart}, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    fetchUsers();
+  }
 
-  // Delete user handler
-  const handleDelete = async (userId) => {
-    if (window.confirm("Do you want to proceed?")) {
-      const resp = await axios.delete(`http://localhost:8000/api/user/${userId}`)
-      console.log(resp);
-      fetchUsers();
-    }
-  };
+
 
   return (
     <div className={styles.container}>
@@ -56,7 +57,7 @@ const Addtocart = () => {
                 <td className={styles.td}>{user.fabric_color}</td>
                 <td className={styles.td}>{user.theme_color}</td>
                 <td className={styles.td}>
-                <i className={`fa fa-trash ${styles.deleteButton}`} aria-hidden="true"></i>
+                  <i className={`fa fa-trash ${styles.deleteButton}`} aria-hidden="true" onClick={() => removeProduct(user._id)}></i>
                 </td>
               </tr>
             ))}

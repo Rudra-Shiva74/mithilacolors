@@ -88,48 +88,63 @@ const Navbar = () => {
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
-                  <i className="fa-solid fa-user"></i> {isAdminLogin() && isAdminLogin().name || isUserLogin() && isUserLogin().name}{" "}
+                  <i className="fa-solid fa-user"></i> {(isAdminLogin() && isAdminLogin().name) || (isUserLogin() && isUserLogin().name)}
                   {/* Display the user's name */}
                 </Link>
-                {isAdminLogin()?
-                <ul className="dropdown-menu" aria-labelledby="userDropdown">
-                  <li>
-                    <Link className="dropdown-item" to="/Admin/UserList">
-                      <i className="fas fa-users"></i> Users List
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="dropdown-item" to="/Admin/ProductOrder">
-                      <i className="fas fa-box"></i> Products list
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="dropdown-item" to="/Profile">
-                      <i className="fa-solid fa-id-card"></i> Profile Updates
-                    </Link>
-                  </li>
+                {isAdminLogin() ?
+                  <ul className="dropdown-menu" aria-labelledby="userDropdown">
+                    <li>
+                      <Link className="dropdown-item" to="/Admin/UserList">
+                        <i className="fas fa-users"></i> Users List
+                      </Link>
+                    </li>
+                    <li>
+                      <Link className="dropdown-item" to="/Admin/ProductOrder">
+                        <i className="fas fa-box"></i> Products list
+                      </Link>
+                    </li>
+                    <li>
+                      <Link className="dropdown-item" to="/Profile">
+                        <i className="fa-solid fa-id-card"></i> Profile Updates
+                      </Link>
+                    </li>
 
+                    <li>
+                      <Link className="dropdown-item" to="/Admin/ClothingForm">
+                        <i className="fas fa-upload"></i>
+                        Upload Product
+                      </Link>
+                    </li>
+                    <li>
+                      <hr className="dropdown-divider" />
+                    </li>
+                    <li>
+                      <button
+                        className="dropdown-item  btn-danger"
+                        onClick={() => {
+                          closeSidebar();
+                          handleLogout();
+                        }}
+                      >
+                        <i className="fa-solid fa-right-from-bracket"></i> Logout
+                      </button>
+                    </li>
+                  </ul> :
+                  <ul className="dropdown-menu" aria-labelledby="userDropdown">
                   <li>
                     <Link className="dropdown-item" to="/Admin/ClothingForm">
-                      <i className="fas fa-upload"></i>
-                      Upload Product
+                      <i className="fa-solid fa-user"></i> Profile
                     </Link>
                   </li>
                   <li>
                     <hr className="dropdown-divider" />
                   </li>
                   <li>
-                    <button
-                      className="dropdown-item  btn-danger"
-                      onClick={() => {
-                        closeSidebar();
-                        handleLogout();
-                      }}
-                    >
+                    <button className="dropdown-item" onClick={handleLogout}>
                       <i className="fa-solid fa-right-from-bracket"></i> Logout
                     </button>
                   </li>
-                </ul>:''}
+                </ul>}
               </li>
             </>
           ) : (
@@ -205,7 +220,7 @@ const Navbar = () => {
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
                   >
-                    <i className="fa-solid fa-user"></i> {isAdminLogin() && isAdminLogin().name || isUserLogin() && isUserLogin().name}
+                    <i className="fa-solid fa-user"></i> {(isAdminLogin() && isAdminLogin().name) || (isUserLogin() && isUserLogin().name)}
                   </Link>
                   {isAdminLogin() ?
                     <ul className="dropdown-menu" aria-labelledby="userDropdown">
@@ -241,7 +256,22 @@ const Navbar = () => {
                           Logout
                         </button>
                       </li>
-                    </ul> : ''}
+                    </ul> :
+                    <ul className="dropdown-menu" aria-labelledby="userDropdown">
+                      <li>
+                        <Link className="dropdown-item" to="/Admin/ClothingForm">
+                          <i className="fa-solid fa-user"></i> Profile
+                        </Link>
+                      </li>
+                      <li>
+                        <hr className="dropdown-divider" />
+                      </li>
+                      <li>
+                        <button className="dropdown-item" onClick={handleLogout}>
+                          <i className="fa-solid fa-right-from-bracket"></i> Logout
+                        </button>
+                      </li>
+                    </ul>}
                 </li>
               ) : (
                 <>

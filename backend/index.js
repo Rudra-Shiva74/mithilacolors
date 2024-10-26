@@ -186,21 +186,6 @@ app.put('api/product/:id', verifyToken, async (req, resp) => {
 })
 
 //add to card
-// app.post("/api/addtocard", async (req, resp) => {
-//     var userExists = await usercardModel.countDocuments({ email: req.body.cart.email });
-//     if(userExists===1){
-
-//     }
-//     try {
-//         var newProduct = new usercardModel(req.body.cart);
-//         let savedUser = await newProduct.save();
-//         return resp.status(200).send("Product Added");
-//     } catch (error) {
-//         console.error(error); // Log the error for debugging
-//         return resp.status(500).send(error); // Send correct status for internal error
-//     }
-// });
-
 app.post("/api/addtocard", async (req, resp) => {
     try {
         const { email, pid } = req.body.cart; // Destructure the incoming data
@@ -235,12 +220,36 @@ app.post("/api/addtocard", async (req, resp) => {
 //get data of add to cart
 app.get('/api/addtocard', async (req, resp) => {
     try {
-        const res = await productModel.find();
+        const res = await usercardModel.find();
         resp.send(res);
     } catch (error) {
         resp.status(208).send();
     }
 })
+
+// remove from cart
+app.post('/api/removetocard', async (req, resp) => {
+    console.log(req.body.caart)
+    try {
+        const { email, pid } = req.body.caart;
+        const user = await usercardModel.findOne({ email });
+
+        if (user) {
+            if (user.pid.includes(pid)) {
+                // Remove the specific `pid` from `user.pid`
+                user.pid = user.pid.filter((productId) => productId !== pid);
+                await user.save();
+                return resp.status(200).send("Product Removed from User's Card");
+            } else {
+                return resp.status(200).send("Product Not Exists in User's Card");
+            }
+        } else {
+            return resp.status(200).send("User does not exist.");
+        }
+    } catch (error) {
+        resp.status(500).send("An error occurred.");
+    }
+});
 
 
 //jwt token verify
