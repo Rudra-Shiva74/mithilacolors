@@ -217,11 +217,15 @@ app.post("/api/addtocard", async (req, resp) => {
     }
 });
 
-//get data of add to cart
-app.get('/api/addtocard', async (req, resp) => {
+//check product added or not in cart
+app.post('/api/checktocart', async (req, resp) => {
     try {
-        const res = await usercardModel.find();
-        resp.send(res);
+        const res = await usercardModel.findOne({ email: req.body.cart.email });
+        if (res) {
+            resp.send(res);
+        } else {
+            return resp.status(201).send("User is Not Exist");
+        }
     } catch (error) {
         resp.status(208).send();
     }
@@ -229,25 +233,49 @@ app.get('/api/addtocard', async (req, resp) => {
 
 // remove from cart
 app.post('/api/removetocard', async (req, resp) => {
-    console.log(req.body.caart)
     try {
-        const { email, pid } = req.body.caart;
+        const { email, pid } = req.body.cart;
         const user = await usercardModel.findOne({ email });
 
         if (user) {
-            if (user.pid.includes(pid)) {
+            // Check if `pid` exists in the user's card
+            if (user.pid.some((productId) => String(productId) === String(pid))) {
                 // Remove the specific `pid` from `user.pid`
-                user.pid = user.pid.filter((productId) => productId !== pid);
+                user.pid = user.pid.filter((productId) => String(productId) !== String(pid));
                 await user.save();
                 return resp.status(200).send("Product Removed from User's Card");
             } else {
-                return resp.status(200).send("Product Not Exists in User's Card");
+                return resp.status(200).send("Product Does Not Exist in User's Card");
             }
         } else {
-            return resp.status(200).send("User does not exist.");
+            return resp.status(404).send("User does not exist.");
         }
     } catch (error) {
+        console.error("Error removing product from user's card:", error);
         resp.status(500).send("An error occurred.");
+    }
+});
+
+
+//get user add to cart data
+app.get('/api/getcartdetails/:id', async (req, res) => {
+    try {
+        // Assuming user's email is in the session
+        const userEmail = req.params.id;
+
+        // Find user card by email and populate product details
+        const userCard = await usercardModel.findOne({ email: userEmail })
+            .populate('pid')  // Populate to get full product details for each pid
+            .exec();
+
+        if (!userCard) {
+            return res.status(404).json({ message: 'User cart not found' });
+        }
+
+        res.json(userCard);  // Send user card with populated product details
+    } catch (error) {
+        console.error("Error fetching cart details:", error);
+        res.status(500).json({ message: 'Internal server error' });
     }
 });
 

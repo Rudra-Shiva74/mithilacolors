@@ -9,9 +9,10 @@ const ProductPage = () => {
   const [imageOptions, setImageOptions] = useState([]);
   const [currentimg, setCurrentimg] = useState();
   const [product, setProduct] = useState();
+  const [checkcart, setCheckcart] = useState([]);
   const [cart, setCart] = useState({
     pid: param.id,
-    email: isUserLogin().email
+    email: (isUserLogin() && isUserLogin().email) ? isUserLogin().email : ''
   })
   const [css, setCss] = useState({
     color: "3px solid #ed08cb",
@@ -24,6 +25,14 @@ const ProductPage = () => {
       setProduct(resp.data);
       setImageOptions(resp.data.image)
       setCurrentimg(`http://localhost:8000/${resp.data.image[0].path}`)
+      const resp1 = await axios.post(`http://localhost:8000/api/checktocart`, { cart }, {
+        headers: {
+          "Content-Type": "application/json",
+        }
+      });
+      if (resp1.status === 200) {
+        setCheckcart(resp1.data.pid);
+      }
     } catch (error) {
       navigate('/ProductSearchPage')
     }
@@ -40,16 +49,31 @@ const ProductPage = () => {
     }
   }
   const addToCart = async () => {
-    const resp = await axios.post(`http://localhost:8000/api/addtocard`, { cart }, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-    console.log(resp);
+    if (!isUserLogin()) {
+      window.alert("Please Login First")
+      navigate('/login');
+    } else {
+      if (checkcart.includes(param.id)) {
+        const resp = await axios.post(`http://localhost:8000/api/removetocard`, { cart }, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+      } else {
+        const resp = await axios.post(`http://localhost:8000/api/addtocard`, { cart }, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+      }
+    }
+    fetchdata();
   }
+
   useEffect(() => {
     fetchdata();
     isAdminLogin();
+    isUserLogin();
   }, []);
 
   return (
@@ -111,7 +135,7 @@ const ProductPage = () => {
                 Edit Product
               </button> </> :
               <><button className={`${styles.btn} ${styles.addToCart}`} onClick={addToCart}>
-                Add To Card
+                {checkcart.includes(param.id) ? 'Remove From Card' : 'Add To Card'}
               </button><button className={`${styles.btn} ${styles.buyNow}`}>
                   Buy Now
                 </button> </>}

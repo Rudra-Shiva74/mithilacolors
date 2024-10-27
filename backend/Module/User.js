@@ -7,7 +7,10 @@ const userSchema = new mongoose.Schema({
 });
 const usercardSchema = new mongoose.Schema({
     email: String,
-    pid: Array
+    pid: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'products'  // referencing the Product model
+    }]
 });
 
 const usercardModel = new mongoose.model("usercards", usercardSchema);
