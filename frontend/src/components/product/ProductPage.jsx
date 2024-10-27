@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styles from "./ProductPage.module.css"; // Import the CSS module
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { Link } from "react-router-dom";
 import { isAdminLogin, isUserLogin } from '../Auth/Logincheck.js'
 const ProductPage = () => {
   const navigate = useNavigate();
@@ -136,9 +137,8 @@ const ProductPage = () => {
               </button> </> :
               <><button className={`${styles.btn} ${styles.addToCart}`} onClick={addToCart}>
                 {checkcart.includes(param.id) ? 'Remove From Card' : 'Add To Card'}
-              </button><button className={`${styles.btn} ${styles.buyNow}`}>
-                  Buy Now
-                </button> </>}
+              </button>
+                <Link to={`/BuyingForm`} className={`${styles.btn} ${styles.buyNow}`}>Buy Now</Link></>}
           </div>
         </div>
       </div>

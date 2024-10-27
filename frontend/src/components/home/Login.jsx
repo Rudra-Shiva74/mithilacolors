@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import "./Login.css";
 import axios from "axios";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { isUserLogin } from "../Auth/Logincheck";
 
 const Login = () => {
@@ -76,6 +78,16 @@ const Login = () => {
   };
 
   useEffect(() => {
+    toast.success('Login Done..!', {
+      position: "top-center",
+      autoClose: 504,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
     if (isUserLogin()) {
       navigate('/');
     }
@@ -150,6 +162,7 @@ const Login = () => {
           {/* Show API error */}
         </form>
       </div>
+      <ToastContainer />
     </div>
   );
 };

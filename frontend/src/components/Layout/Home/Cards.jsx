@@ -24,7 +24,7 @@ const Cards = () => {
               </p>
             </div>
             <div className="card-footer">
-              <a href="/Product" className="btn btn-primary">
+              <a href="/ProductSearchPage" className="btn btn-primary">
                 customization
               </a>
             </div>

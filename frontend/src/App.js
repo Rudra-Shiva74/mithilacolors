@@ -14,7 +14,9 @@ import ProductSearchPage from "./components/ProductSearchPage.jsx";
 import ProductPage from "./components/product/ProductPage.jsx";
 import UserList from "./components/Admin/UserList.jsx";
 import PrivateRoute from "./components/Admin/PrivateRoute.js";
+import UserPrivateRoute from "./components/user/UserPrivateRoute.jsx";
 import Addtocart from "./components/product/Addtocarrd.jsx";
+import BuyingForm from "./components/product/BuyingForm.jsx";
 function App() {
   return (
     <>
@@ -29,13 +31,15 @@ function App() {
           <Route path="/AboutMithila" element={<AboutMithila />} />
           <Route path="/ProductSearchPage" element={<ProductSearchPage />} />
           <Route path="/AboutProduct/:id" element={<ProductPage />} />
-          <Route path="/Addtocard" element={<Addtocart />} />
+          <Route path="/BuyingForm" element={<BuyingForm />} />
           <Route  element={<PrivateRoute />}>
             <Route exact path="/Admin/UserList" element={<UserList />} />
             <Route path="/Admin/ClothingForm" element={<ClothingForm />} />
             <Route path="/Admin/ClothingForm" element={<ClothingForm />} />
           </Route>
-
+          <Route  element={<UserPrivateRoute />}>
+            <Route exact path="/user/Addtocard" element={<Addtocart />} />
+          </Route>
         </Routes>
         <Footer />
       </Router>

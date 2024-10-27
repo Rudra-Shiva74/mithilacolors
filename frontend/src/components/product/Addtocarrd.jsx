@@ -1,22 +1,29 @@
 import React, { useState, useEffect } from "react";
 import styles from "../Admin/UserList.module.css"; // Import the CSS module
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { isUserLogin } from "../Auth/Logincheck";
 
 const Addtocart = () => {
   // State to store the list of cart
   const [caart, setCaart] = useState([]);
+  const navigate = useNavigate();
 
   // Fetch cart when component mounts
   useEffect(() => {
+    if (!isUserLogin()) {
+      navigate('/Login');
+    }
     fetchUsers();
   }, []);
 
   // Mocking user data with name, mobile number, and email
   const fetchUsers = async () => {
-    const resp = await axios.get(`http://localhost:8000/api/getcartdetails/${isUserLogin() && isUserLogin().email}`);
-    setCaart(resp.data.pid);
+    try {
+      const resp = await axios.get(`http://localhost:8000/api/getcartdetails/${isUserLogin() && isUserLogin().email}`);
+      setCaart(resp.data.pid);
+    } catch (error) {
+    }
   };
 
   const removeProduct = async (pid) => {

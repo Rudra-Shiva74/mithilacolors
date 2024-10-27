@@ -72,7 +72,7 @@ const Navbar = () => {
           </li>
           {isAdminLogin() ? '' :
             <li className="nav-item">
-              <Link className="nav-link" to="/Addtocard">
+              <Link className="nav-link" to="/user/Addtocard">
                 <i className="fa fa-cart-plus" aria-hidden="true"></i> Cards
               </Link>
             </li>}
@@ -132,7 +132,7 @@ const Navbar = () => {
                   </ul> :
                   <ul className="dropdown-menu" aria-labelledby="userDropdown">
                   <li>
-                    <Link className="dropdown-item" to="/Admin/ClothingForm">
+                    <Link className="dropdown-item" to="/user/Profile">
                       <i className="fa-solid fa-user"></i> Profile
                     </Link>
                   </li>
@@ -205,7 +205,7 @@ const Navbar = () => {
               </li>
               {isAdminLogin() ? '' :
                 <li className="nav-item">
-                  <Link className="nav-link" to="/Addtocard">
+                  <Link className="nav-link" to="/user/Addtocard">
                     <i className="fa fa-cart-plus" aria-hidden="true"></i> Cards
                   </Link>
                 </li>}
@@ -259,7 +259,7 @@ const Navbar = () => {
                     </ul> :
                     <ul className="dropdown-menu" aria-labelledby="userDropdown">
                       <li>
-                        <Link className="dropdown-item" to="/Admin/ClothingForm">
+                        <Link className="dropdown-item" to="/user/Profile">
                           <i className="fa-solid fa-user"></i> Profile
                         </Link>
                       </li>

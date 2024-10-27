@@ -79,6 +79,8 @@
   .buyNow {
     background-color: #ff5722;
     color: white;
+    text-decoration: none;
+    text-align: center;
   }
   
   /* Responsive Design for larger screens */
