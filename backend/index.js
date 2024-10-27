@@ -54,7 +54,7 @@ app.post("/api/user_register", async (req, resp) => {
         } else {
             var newUser = new userModel(req.body);
             let savedUser = await newUser.save();
-            return resp.status(201).send("Signup successful");
+            return resp.status(200).send("Signup successful");
         }
     } catch (error) {
         console.error(error); // Log the error for debugging
@@ -122,7 +122,7 @@ app.post("/api/admin_login", async (req, resp) => {
         const res = await Admin.findOne({ $and: [{ email: req.body.email }, { password: req.body.password }] }).select({ password: 0 });
         if (res) {
             Jwt.sign({ res }, jwtKey, { expiresIn: '1h' }, (err, token) => {
-                resp.send({ res, token });
+                resp.status(200).send({ res, token });
             })
         } else {
             resp.status(203).send({ result: "Wrong Email or Password" });

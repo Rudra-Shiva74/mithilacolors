@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import "./Login.css";
 import axios from "axios";
 import { isAdminLogin } from "../Auth/Logincheck";
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const AdminLogin = () => {
   const [email, setusername] = useState("");
   const [password, setPassword] = useState("");
@@ -43,31 +44,37 @@ const AdminLogin = () => {
             },
           }
         );
-
-        // Extract response data
         const data = response.data;
-        console.log(data)
-        // // If the response is successful (status 200)
         if (response.status === 200) {
-          // Store user token in localStorage
-          localStorage.setItem("token", data.token || ""); // Handle token if sent
-
-          // Optionally store user details if needed
-          localStorage.setItem("admin", JSON.stringify(data.res)); // Assuming the response contains user info
-
-          // Redirect to the homepage
-          naigate('/');
+          localStorage.setItem("token", data.token || "");
+          localStorage.setItem("admin", JSON.stringify(data.res));
+          toast.success(`Login Done..!`, {
+            position: "top-center",
+            autoClose: 504,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+          setTimeout(() => {
+            naigate('/');
+          }, 1000)
         } else {
-          setErrors({ ...errors, api: data.message }); // Set API error message
+          toast.error(`${response.data.result}`, {
+            position: "top-center",
+            autoClose: 504,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
         }
       } catch (error) {
-        // Handle errors from the API
-        setErrors({
-          ...errors,
-          api:
-            error.response?.data?.message || "Login failed, please try again.",
-        });
-        console.error("Error:", error);
+        console.log(error);
       }
     } else {
       // Set form validation errors
@@ -147,6 +154,7 @@ const AdminLogin = () => {
           {/* Show API error */}
         </form>
       </div>
+      <ToastContainer />
     </div>
   );
 };

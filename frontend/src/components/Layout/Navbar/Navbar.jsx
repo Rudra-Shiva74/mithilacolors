@@ -19,7 +19,7 @@ const Navbar = () => {
     localStorage.removeItem("user"); // Remove user data from local storage
     localStorage.removeItem("admin"); // Remove user data from local storage
     localStorage.removeItem("token"); // Remove user data from local storage
-    navigate("/"); // Redirect to home page
+    navigate("/Login"); // Redirect to home page
   };
 
   useEffect(() => {

@@ -3,6 +3,8 @@ import styles from "./ClothingForm.module.css"; // Ensure you're importing the c
 import { isAdminLogin } from "../Auth/Logincheck";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const ClothingForm = () => {
   const navigate = useNavigate();
   const [flag, setFlag] = useState(false);
@@ -32,8 +34,8 @@ const ClothingForm = () => {
   ];
   const fabrics = [
     "Eri Silk",
-    "Tussar Slik",
-    "Paper Slik",
+    "Tussar Silk",
+    "Paper Silk",
     "Khadi Cotton",
     "Tc Cotton",
   ];
@@ -83,8 +85,22 @@ const ClothingForm = () => {
       }
     );
     if (response.status === 200) {
-      alert('Product Add');
-      navigate('/ProductSearchPage');
+      toast.success(`${response.data}`, {
+        position: "top-center",
+        autoClose: 504,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      setTimeout(() => {
+        navigate('/ProductSearchPage');
+      }, 500);
+    }
+    else{
+      
     }
   };
 
@@ -212,6 +228,7 @@ const ClothingForm = () => {
       <button type="submit" className={styles.submitButton}>
         Submit
       </button>
+      <ToastContainer />
     </form>
   );
 };

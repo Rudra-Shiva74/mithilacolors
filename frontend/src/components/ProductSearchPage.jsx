@@ -59,8 +59,8 @@ const ProductSearchPage = () => {
   ];
   const fabrics = [
     "Eri Silk",
-    "Tussar Slik",
-    "Paper Slik",
+    "Tussar Silk",
+    "Paper Silk",
     "Khadi Cotton",
     "Tc Cotton",
   ];

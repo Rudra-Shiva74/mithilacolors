@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios"; // Import axios
 import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import "./SignUp.css";
 
 const SignUp = () => {
@@ -41,7 +43,6 @@ const SignUp = () => {
 
     if (Object.keys(formErrors).length === 0) {
       try {
-        console.log(formData);
         const response = await axios.post(
           "http://localhost:8000/api/user_register",
           formData,
@@ -51,13 +52,47 @@ const SignUp = () => {
             },
           }
         );
-        console.log("Response from server:", response.data);
-        navigate("/login"); // Navigate to the login page after successful signup
+        console.log(response);
+        if(response.status===200){
+          toast.success(`${response.data}`, {
+            position: "top-center",
+            autoClose: 504,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+          setTimeout(()=>{
+            navigate('/Login');
+          },1000);
+        }
+        else{
+          toast.error(`${response.data}`, {
+            position: "top-center",
+            autoClose: 504,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
+        // navigate("/login"); // Navigate to the login page after successful signup
       } catch (error) {
-        console.error(
-          "Error:",
-          error.response ? error.response.data : error.message
-        );
+        console.log(error)
+        toast.error(`${error.response.data.result}`, {
+          position: "top-center",
+          autoClose: 504,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
       }
     } else {
       setErrors(formErrors);
@@ -133,6 +168,7 @@ const SignUp = () => {
           </button>
         </form>
       </div>
+      <ToastContainer />
     </div>
   );
 };

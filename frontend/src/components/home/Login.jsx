@@ -52,19 +52,32 @@ const Login = () => {
         const data = response.data;
         // If the response is successful (status 200)
         if (response.status === 200) {
-          if (true) {
-            // Store user token in localStorage
-            localStorage.setItem("token", data.token); // Assuming the backend sends a JWT token
-
-            // Optionally store user details if needed
-            localStorage.setItem("user", JSON.stringify(data.res));
-          } // Assuming the response contains user info
-
-          // Redirect to the homepage
-          navigate("/");
-          // window.location.href = "/";
+          toast.success(`Login Done..!`, {
+            position: "top-center",
+            autoClose: 504,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+          localStorage.setItem("token", data.token);
+          localStorage.setItem("user", JSON.stringify(data.res));
+          setTimeout(() => {
+            navigate("/ProductSearchPage");
+        }, 1000);
         } else {
-          setErrors({ ...errors, api: data.message }); // Set API error message
+          toast.error(`${response.data.result}`, {
+            position: "top-center",
+            autoClose: 504,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
         }
       } catch (error) {
         // Set a generic error if the request fails
@@ -78,16 +91,6 @@ const Login = () => {
   };
 
   useEffect(() => {
-    toast.success('Login Done..!', {
-      position: "top-center",
-      autoClose: 504,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
     if (isUserLogin()) {
       navigate('/');
     }
