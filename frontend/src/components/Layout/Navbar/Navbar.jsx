@@ -131,20 +131,20 @@ const Navbar = () => {
                     </li>
                   </ul> :
                   <ul className="dropdown-menu" aria-labelledby="userDropdown">
-                  <li>
-                    <Link className="dropdown-item" to="/user/Profile">
-                      <i className="fa-solid fa-user"></i> Profile
-                    </Link>
-                  </li>
-                  <li>
-                    <hr className="dropdown-divider" />
-                  </li>
-                  <li>
-                    <button className="dropdown-item" onClick={handleLogout}>
-                      <i className="fa-solid fa-right-from-bracket"></i> Logout
-                    </button>
-                  </li>
-                </ul>}
+                    <li>
+                      <Link className="dropdown-item" to="/user/Profile">
+                        <i className="fa-solid fa-user"></i> Profile
+                      </Link>
+                    </li>
+                    <li>
+                      <hr className="dropdown-divider" />
+                    </li>
+                    <li>
+                      <button className="dropdown-item" onClick={handleLogout}>
+                        <i className="fa-solid fa-right-from-bracket"></i> Logout
+                      </button>
+                    </li>
+                  </ul>}
               </li>
             </>
           ) : (
@@ -206,6 +206,7 @@ const Navbar = () => {
               {isAdminLogin() ? '' :
                 <li className="nav-item">
                   <Link className="nav-link" to="/user/Addtocard">
+                    <span className="item-count">2</span>
                     <i className="fa fa-cart-plus" aria-hidden="true"></i> Cards
                   </Link>
                 </li>}

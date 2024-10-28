@@ -9,15 +9,16 @@ import { isAdminLogin, isUserLogin } from '../Auth/Logincheck.js'
 const ProductPage = () => {
   const apiKey = process.env.REACT_APP_API_KEY;
   const apiUrl = process.env.REACT_APP_API_URL;
+  const imgUrl = process.env.REACT_APP_IMG_URL;
   const navigate = useNavigate();
   const param = useParams();
   const [imageOptions, setImageOptions] = useState([]);
   const [currentimg, setCurrentimg] = useState();
   const [product, setProduct] = useState({});
-  const [checkcart, setCheckcart] = useState([]);
   const [cart, setCart] = useState({
     pid: param.id,
-    email: (isUserLogin() && isUserLogin().email) ? isUserLogin().email : ''
+    email: (isUserLogin() && isUserLogin().email) ? isUserLogin().email : '',
+    count: 1
   })
   const [css, setCss] = useState({
     color: "3px solid #ed08cb",
@@ -26,22 +27,22 @@ const ProductPage = () => {
   // State to keep track of the selected image
   const fetchdata = async () => {
     try {
-      const resp = await axios.get(`http://localhost:8000/api/product/${param.id}`, {
+      const resp = await axios.get(`${apiUrl}product/${param.id}`, {
         headers: {
           'Authorization': `${apiKey}`
         }
       });
       setProduct(resp.data);
       setImageOptions(resp.data.image)
-      setCurrentimg(`http://localhost:8000/${resp.data.image[css.index].path}`)
-      const resp1 = await axios.post(`${apiUrl}checktocart`, { cart }, {
-        headers: {
-          "Content-Type": "application/json", 'Authorization': `${apiKey}`
-        }
-      });
-      if (resp1.status === 200) {
-        setCheckcart(resp1.data.pid);
-      }
+      setCurrentimg(`${imgUrl + resp.data.image[css.index].path}`)
+      // const resp1 = await axios.post(`${apiUrl}checktocart`, { cart }, {
+      //   headers: {
+      //     "Content-Type": "application/json", 'Authorization': `${apiKey}`
+      //   }
+      // });
+      // if (resp1.status === 200) {
+      //   setCheckcart(resp1.data.pid);
+      // }
     } catch (error) {
       navigate('/ProductSearchPage')
     }
@@ -77,21 +78,24 @@ const ProductPage = () => {
         navigate('/Login');
       }, 1000)
     } else {
-      if (checkcart.includes(param.id)) {
-        const resp = await axios.post(`${apiUrl}removetocard`, { cart }, {
-          headers: {
-            "Content-Type": "application/json",
-            'Authorization': `${apiKey}`
-          },
-        })
-      } else {
-        const resp = await axios.post(`${apiUrl}addtocard`, { cart }, {
-          headers: {
-            "Content-Type": "application/json",
-            'Authorization': `${apiKey}`
-          },
-        })
-      }
+
+
+      // if (checkcart.includes(param.id)) {
+      //   const resp = await axios.post(`${apiUrl}removetocard`, { cart }, {
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //       'Authorization': `${apiKey}`
+      //     },
+      //   })
+      // } else {
+      const resp = await axios.post(`${apiUrl}addtocard`, { cart }, {
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': `${apiKey}`
+        },
+      })
+      console.log(resp)
+      // }
     }
     fetchdata();
   }
@@ -110,13 +114,13 @@ const ProductPage = () => {
           {imageOptions && imageOptions.map((image, index) => (
             <img
               key={index}
-              src={`http://localhost:8000/${image.path}`}
+              src={`${imgUrl + image.path}`}
               alt={`Thumbnail ${index + 1}`}
               className={styles.thumbnailImage}
               style={{ border: index === css.index ? css.color : '' }}
               onClick={() => {
                 setCss({ color: "3px solid #ed08cb", index: index });
-                setCurrentimg(`http://localhost:8000/${image.path}`)
+                setCurrentimg(`${imgUrl + image.path}`)
               }}
             />
           ))}
@@ -160,7 +164,7 @@ const ProductPage = () => {
                 Edit Product
               </button> </> :
               <><button className={`${styles.btn} ${styles.addToCart}`} onClick={addToCart}>
-                {checkcart.includes(param.id) ? 'Remove From Card' : 'Add To Card'}
+                Add To Card
               </button>
                 <Link to={`/BuyingForm`} className={`${styles.btn} ${styles.buyNow}`}>Buy Now</Link></>}
           </div>

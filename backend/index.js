@@ -190,25 +190,28 @@ app.put('api/product/:id', verifyToken, async (req, resp) => {
 //add to card
 app.post("/api/addtocard", verifyToken, async (req, resp) => {
     try {
-        const { email, pid } = req.body.cart; // Destructure the incoming data
+        const { email, pid, count } = req.body.cart; // Destructure the incoming data
 
-        // Check if the user exists
+        // Check if the user with the email exists
         const user = await usercardModel.findOne({ email });
 
         if (user) {
-            // If user exists, push new `pid` into the `pid` array if it's not already present
-            if (!user.pid.includes(pid)) {
-                user.pid.push(pid);
-                await user.save(); // Save the updated document
-                return resp.status(200).send("Product Added to Existing User's Card");
+            // Check if the product with pid already exists for the user
+            const productIndex = user.product.findIndex(item => item.pid.toString() === pid);
+            if (productIndex > -1) {
+                // If product exists, increase quantity by 1
+                user.product[productIndex].quantity += count;
             } else {
-                return resp.status(200).send("Product Already Exists in User's Card");
+                // If product doesn't exist, add it with default quantity of 1
+                user.product.push({ pid, quantity: count });
             }
+            await user.save();
+            return resp.status(200).send("Product quantity updated or added to existing user cart.");
         } else {
-            // If user doesn't exist, create a new user document
+            // If user doesn't exist, create a new user document with the product
             const newUser = new usercardModel({
                 email,
-                pid: [pid] // Initialize the array with the new pid
+                product: [{ pid, quantity: count }]
             });
             await newUser.save();
             return resp.status(200).send("New User Created and Product Added");
@@ -224,7 +227,7 @@ app.post('/api/checktocart', verifyToken, async (req, resp) => {
     try {
         const res = await usercardModel.findOne({ email: req.body.cart.email });
         if (res) {
-            resp.send(res);
+            resp.send(res)
         } else {
             return resp.status(201).send("User is Not Exist");
         }
@@ -241,9 +244,9 @@ app.post('/api/removetocard', verifyToken, async (req, resp) => {
 
         if (user) {
             // Check if `pid` exists in the user's card
-            if (user.pid.some((productId) => String(productId) === String(pid))) {
+            if (user.product.some((productId) => String(productId.pid) === String(pid))) {
                 // Remove the specific `pid` from `user.pid`
-                user.pid = user.pid.filter((productId) => String(productId) !== String(pid));
+                user.product = user.product.filter((productId) => String(productId.pid) !== String(pid));
                 await user.save();
                 return resp.status(200).send("Product Removed from User's Card");
             } else {
@@ -260,14 +263,14 @@ app.post('/api/removetocard', verifyToken, async (req, resp) => {
 
 
 //get user add to cart data
-app.get('/api/getcartdetails/:id', verifyToken, async (req, res) => {
+app.get('/api/getcartdetails/:email', verifyToken, async (req, res) => {
     try {
         // Assuming user's email is in the session
-        const userEmail = req.params.id;
+        const userEmail = req.params.email;
 
         // Find user card by email and populate product details
         const userCard = await usercardModel.findOne({ email: userEmail })
-            .populate('pid')  // Populate to get full product details for each pid
+            .populate('product.pid')  // Populate to get full product details for each pid
             .exec();
 
         if (!userCard) {
@@ -277,7 +280,7 @@ app.get('/api/getcartdetails/:id', verifyToken, async (req, res) => {
         res.json(userCard);  // Send user card with populated product details
     } catch (error) {
         console.error("Error fetching cart details:", error);
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({ result: 'SomeThing Went Wrong' });
     }
 });
 
@@ -285,7 +288,6 @@ app.get('/api/getcartdetails/:id', verifyToken, async (req, res) => {
 //jwt token verify
 function verifyToken(req, resp, next) {
     const token = req.headers.authorization;
-    console.log(apiKey)
     if (token) {
         if (apiKey === token) {
             next();
