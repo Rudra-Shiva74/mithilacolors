@@ -6,6 +6,7 @@ import { isAdminLogin } from "../Auth/Logincheck";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 const AdminLogin = () => {
+  const apiUrl = process.env.REACT_APP_API_URL;
   const [email, setusername] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
@@ -33,7 +34,7 @@ const AdminLogin = () => {
       try {
         // Make API request to login the user
         const response = await axios.post(
-          "http://localhost:8000/api/admin_login", // Correct endpoint
+          `${apiUrl}admin_login`, // Correct endpoint
           {
             email, // Send email directly
             password, // Send password directly

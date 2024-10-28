@@ -6,6 +6,7 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 const ClothingForm = () => {
+  const apiUrl = process.env.REACT_APP_API_URL;
   const navigate = useNavigate();
   const [flag, setFlag] = useState(false);
   const [theme, setTheme] = useState('');
@@ -27,7 +28,6 @@ const ClothingForm = () => {
     "Saree",
     "Suits",
     "Dupatta",
-    "MensKurta",
     "Mens Kurta",
     "Mens Shawl",
     "Paag",
@@ -77,7 +77,7 @@ const ClothingForm = () => {
     });
     console.log(formDataObj);
     // const product = { clothing_type: e.target.clothing_type.value, theme: e.target.theme.value, fabric: e.target.fabric.value, fabric_color: e.target.fabric_color.value, theme_color: e.target.theme_color.value, admin_id: admin_id }
-    const response = await axios.post("http://localhost:8000/api/add_product", formDataObj,
+    const response = await axios.post(`${apiUrl}add_product`, formDataObj,
       {
         headers: {
           'Content-Type': 'multipart/form-data',

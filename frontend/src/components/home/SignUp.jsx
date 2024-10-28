@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import "./SignUp.css";
 
 const SignUp = () => {
+  const apiUrl = process.env.REACT_APP_API_URL;
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -44,7 +45,7 @@ const SignUp = () => {
     if (Object.keys(formErrors).length === 0) {
       try {
         const response = await axios.post(
-          "http://localhost:8000/api/user_register",
+          `${apiUrl}user_register`,
           formData,
           {
             headers: {

@@ -7,6 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { isUserLogin } from "../Auth/Logincheck";
 
 const Login = () => {
+  const apiUrl = process.env.REACT_APP_API_URL;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
@@ -36,7 +37,7 @@ const Login = () => {
       try {
         // Make API request to login the user
         const response = await axios.post(
-          "http://localhost:8000/api/user_login", // Assuming this is the correct endpoint
+          `${apiUrl}user_login`, // Assuming this is the correct endpoint
           {
             email, // Send email and password in the request body
             password,

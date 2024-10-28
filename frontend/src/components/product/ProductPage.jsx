@@ -3,13 +3,16 @@ import styles from "./ProductPage.module.css"; // Import the CSS module
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { isAdminLogin, isUserLogin } from '../Auth/Logincheck.js'
 const ProductPage = () => {
+  const apiUrl = process.env.REACT_APP_API_URL;
   const navigate = useNavigate();
   const param = useParams();
   const [imageOptions, setImageOptions] = useState([]);
   const [currentimg, setCurrentimg] = useState();
-  const [product, setProduct] = useState();
+  const [product, setProduct] = useState({});
   const [checkcart, setCheckcart] = useState([]);
   const [cart, setCart] = useState({
     pid: param.id,
@@ -17,7 +20,7 @@ const ProductPage = () => {
   })
   const [css, setCss] = useState({
     color: "3px solid #ed08cb",
-    index: 0
+    index: 0,
   });
   // State to keep track of the selected image
   const fetchdata = async () => {
@@ -25,8 +28,8 @@ const ProductPage = () => {
       const resp = await axios.get(`http://localhost:8000/api/product/${param.id}`);
       setProduct(resp.data);
       setImageOptions(resp.data.image)
-      setCurrentimg(`http://localhost:8000/${resp.data.image[0].path}`)
-      const resp1 = await axios.post(`http://localhost:8000/api/checktocart`, { cart }, {
+      setCurrentimg(`http://localhost:8000/${resp.data.image[css.index].path}`)
+      const resp1 = await axios.post(`${apiUrl}checktocart`, { cart }, {
         headers: {
           "Content-Type": "application/json",
         }
@@ -42,7 +45,7 @@ const ProductPage = () => {
   const deleteProduct = async () => {
     try {
       if (window.confirm("Do you want to proceed?")) {
-        const resp = await axios.delete(`http://localhost:8000/api/product/${param.id}`);
+        const resp = await axios.delete(`${apiUrl}product/${param.id}`);
         navigate('/ProductSearchPage')
       }
     } catch (error) {
@@ -51,17 +54,28 @@ const ProductPage = () => {
   }
   const addToCart = async () => {
     if (!isUserLogin()) {
-      window.alert("Please Login First")
-      navigate('/login');
+      toast.warning(`Login First`, {
+        position: "top-center",
+        autoClose: 504,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      setTimeout(() => {
+        navigate('/Login');
+      }, 1000)
     } else {
       if (checkcart.includes(param.id)) {
-        const resp = await axios.post(`http://localhost:8000/api/removetocard`, { cart }, {
+        const resp = await axios.post(`${apiUrl}removetocard`, { cart }, {
           headers: {
             "Content-Type": "application/json",
           },
         })
       } else {
-        const resp = await axios.post(`http://localhost:8000/api/addtocard`, { cart }, {
+        const resp = await axios.post(`${apiUrl}addtocard`, { cart }, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -113,19 +127,18 @@ const ProductPage = () => {
             <p>All Details:</p>
             <ul>
               <li>
-                <b>Clothing Theme :</b>5% Unlimited Cashback on Flipkart Axis
-                Bank Credit Card
+                <b>Clothing Theme :</b> {product.clothing_type}
               </li>
               <li>
-                <b>Fabric :</b>10% off up to ₹1,500 on SBI Credit Card
-                Transactions of ₹4,990 and above
+                <b>Fabric :</b> {product.fabric}
               </li>
               <li>
-                <b>Fabric_color :</b>10% off up to ₹1,750 on SBI Credit Card EMI
-                Transactions of ₹4,990 and above
+                <b>Fabric color :</b> {product.fabric_color}
+              </li><li>
+                <b>Theme :</b> {product.theme}
               </li>
               <li>
-                <b>Theme color :</b> Get extra ₹1500 off (inclusive of cashback)
+                <b>Theme color :</b> {product.theme_color}
               </li>
             </ul>
           </div>
@@ -142,6 +155,7 @@ const ProductPage = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

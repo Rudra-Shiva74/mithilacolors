@@ -4,6 +4,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 
 const ProductSearchPage = () => {
+  const apiUrl = process.env.REACT_APP_API_URL;
   const [selectedTheme, setSelectedTheme] = useState(null);
   const [selectedClothing_type, setSelectedClothing_type] = useState(null);
   const [selectedFabric, setSelectedFabric] = useState(null);
@@ -14,8 +15,12 @@ const ProductSearchPage = () => {
   // Sample product data with unique IDs
 
   const fetchproducts = async () => {
-    const resp = await axios.get(`http://localhost:8000/api/product`);
-    setProducts(resp.data);
+    try {
+      const resp = await axios.get(`${apiUrl}product`);
+      setProducts(resp.data);
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   // Function to clear all filters
@@ -104,7 +109,7 @@ const ProductSearchPage = () => {
           aria-label="Select Clothing Type"
         >
           <option value="">Select Clothing Type</option>
-         {clothingTypes.map((type) => (
+          {clothingTypes.map((type) => (
             <option key={type} value={type}>
               {type}
             </option>

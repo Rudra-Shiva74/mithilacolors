@@ -95,7 +95,7 @@ const Footer = () => {
         {/* Copyright Section */}
         <div className="text-center mt-4">
           <p>Copyright 2024 © Maithil Manch, All Rights Reserved.</p>
-          <p>Website Designed and Developed by s.k.mishra</p>
+          <p>Website Designed and Developed by S.K.Mishra & Abhishek Tiwari</p>
         </div>
       </div>
     </footer>

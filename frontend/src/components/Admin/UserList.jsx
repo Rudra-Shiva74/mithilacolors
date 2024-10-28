@@ -5,7 +5,7 @@ import axios from "axios";
 const UserList = () => {
   // State to store the list of users
   const [users, setUsers] = useState([]);
-
+  const apiUrl = process.env.REACT_APP_API_URL;
   // Fetch users when component mounts
   useEffect(() => {
     fetchUsers();
@@ -13,7 +13,7 @@ const UserList = () => {
 
   // Mocking user data with name, mobile number, and email
   const fetchUsers = async () => {
-    const resp = await axios.get(`http://localhost:8000/api/user_list`);
+    const resp = await axios.get(`${apiUrl}user_list`);
     setUsers(resp.data);
   };
 
@@ -26,7 +26,7 @@ const UserList = () => {
   // Delete user handler
   const handleDelete = async (userId) => {
     if (window.confirm("Do you want to proceed?")) {
-      const resp = await axios.delete(`http://localhost:8000/api/user/${userId}`)
+      const resp = await axios.delete(`${apiUrl}user/${userId}`)
       console.log(resp);
       fetchUsers();
     }

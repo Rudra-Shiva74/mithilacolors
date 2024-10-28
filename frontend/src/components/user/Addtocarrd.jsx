@@ -3,24 +3,21 @@ import styles from "../Admin/UserList.module.css"; // Import the CSS module
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { isUserLogin } from "../Auth/Logincheck";
-
 const Addtocart = () => {
+  const apiUrl = process.env.REACT_APP_API_URL;
   // State to store the list of cart
   const [caart, setCaart] = useState([]);
   const navigate = useNavigate();
 
   // Fetch cart when component mounts
   useEffect(() => {
-    if (!isUserLogin()) {
-      navigate('/Login');
-    }
     fetchUsers();
   }, []);
 
   // Mocking user data with name, mobile number, and email
   const fetchUsers = async () => {
     try {
-      const resp = await axios.get(`http://localhost:8000/api/getcartdetails/${isUserLogin() && isUserLogin().email}`);
+      const resp = await axios.get(`${apiUrl}getcartdetails/${isUserLogin() && isUserLogin().email}`);
       setCaart(resp.data.pid);
     } catch (error) {
     }
@@ -28,7 +25,7 @@ const Addtocart = () => {
 
   const removeProduct = async (pid) => {
     const cart = { pid: pid, email: isUserLogin().email }
-    const resp = await axios.post(`http://localhost:8000/api/removetocard`,
+    const resp = await axios.post(`${apiUrl}removetocard`,
       { cart }, {
       headers: {
         "Content-Type": "application/json",
