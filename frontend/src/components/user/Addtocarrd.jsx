@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { isUserLogin } from "../Auth/Logincheck";
 const Addtocart = () => {
   const apiUrl = process.env.REACT_APP_API_URL;
+  const apiKey = process.env.REACT_APP_API_KEY;
   // State to store the list of cart
   const [caart, setCaart] = useState([]);
   const navigate = useNavigate();
@@ -17,7 +18,11 @@ const Addtocart = () => {
   // Mocking user data with name, mobile number, and email
   const fetchUsers = async () => {
     try {
-      const resp = await axios.get(`${apiUrl}getcartdetails/${isUserLogin() && isUserLogin().email}`);
+      const resp = await axios.get(`${apiUrl}getcartdetails/${isUserLogin() && isUserLogin().email}`, {
+        headers: {
+          'Authorization': `${apiKey}`
+        }
+      });
       setCaart(resp.data.pid);
     } catch (error) {
     }
@@ -29,6 +34,7 @@ const Addtocart = () => {
       { cart }, {
       headers: {
         "Content-Type": "application/json",
+        'Authorization': `${apiKey}`
       },
     });
     fetchUsers();

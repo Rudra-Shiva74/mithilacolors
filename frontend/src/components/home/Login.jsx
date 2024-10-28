@@ -7,6 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { isUserLogin } from "../Auth/Logincheck";
 
 const Login = () => {
+  const apiKey = process.env.REACT_APP_API_KEY;
   const apiUrl = process.env.REACT_APP_API_URL;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -44,7 +45,7 @@ const Login = () => {
           },
           {
             headers: {
-              "Content-Type": "application/json",
+              "Content-Type": "application/json", 'Authorization': `${apiKey}`
             },
           }
         );
@@ -67,7 +68,7 @@ const Login = () => {
           localStorage.setItem("user", JSON.stringify(data.res));
           setTimeout(() => {
             navigate("/ProductSearchPage");
-        }, 1000);
+          }, 1000);
         } else {
           toast.error(`${response.data.result}`, {
             position: "top-center",

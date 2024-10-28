@@ -4,6 +4,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 
 const ProductSearchPage = () => {
+  const apiKey = process.env.REACT_APP_API_KEY;
   const apiUrl = process.env.REACT_APP_API_URL;
   const [selectedTheme, setSelectedTheme] = useState(null);
   const [selectedClothing_type, setSelectedClothing_type] = useState(null);
@@ -16,7 +17,11 @@ const ProductSearchPage = () => {
 
   const fetchproducts = async () => {
     try {
-      const resp = await axios.get(`${apiUrl}product`);
+      const resp = await axios.get(`${apiUrl}product`, {
+        headers: {
+          'Authorization': `${apiKey}`
+        }
+      });
       setProducts(resp.data);
     } catch (error) {
       console.log(error)

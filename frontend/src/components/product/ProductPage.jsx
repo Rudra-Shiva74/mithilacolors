@@ -7,6 +7,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { isAdminLogin, isUserLogin } from '../Auth/Logincheck.js'
 const ProductPage = () => {
+  const apiKey = process.env.REACT_APP_API_KEY;
   const apiUrl = process.env.REACT_APP_API_URL;
   const navigate = useNavigate();
   const param = useParams();
@@ -25,13 +26,17 @@ const ProductPage = () => {
   // State to keep track of the selected image
   const fetchdata = async () => {
     try {
-      const resp = await axios.get(`http://localhost:8000/api/product/${param.id}`);
+      const resp = await axios.get(`http://localhost:8000/api/product/${param.id}`, {
+        headers: {
+          'Authorization': `${apiKey}`
+        }
+      });
       setProduct(resp.data);
       setImageOptions(resp.data.image)
       setCurrentimg(`http://localhost:8000/${resp.data.image[css.index].path}`)
       const resp1 = await axios.post(`${apiUrl}checktocart`, { cart }, {
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json", 'Authorization': `${apiKey}`
         }
       });
       if (resp1.status === 200) {
@@ -45,7 +50,11 @@ const ProductPage = () => {
   const deleteProduct = async () => {
     try {
       if (window.confirm("Do you want to proceed?")) {
-        const resp = await axios.delete(`${apiUrl}product/${param.id}`);
+        const resp = await axios.delete(`${apiUrl}product/${param.id}`, {
+          headers: {
+            'Authorization': `${apiKey}`
+          }
+        });
         navigate('/ProductSearchPage')
       }
     } catch (error) {
@@ -72,12 +81,14 @@ const ProductPage = () => {
         const resp = await axios.post(`${apiUrl}removetocard`, { cart }, {
           headers: {
             "Content-Type": "application/json",
+            'Authorization': `${apiKey}`
           },
         })
       } else {
         const resp = await axios.post(`${apiUrl}addtocard`, { cart }, {
           headers: {
             "Content-Type": "application/json",
+            'Authorization': `${apiKey}`
           },
         })
       }

@@ -6,6 +6,7 @@ import { isAdminLogin } from "../Auth/Logincheck";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 const AdminLogin = () => {
+  const apiKey = process.env.REACT_APP_API_KEY;
   const apiUrl = process.env.REACT_APP_API_URL;
   const [email, setusername] = useState("");
   const [password, setPassword] = useState("");
@@ -42,6 +43,7 @@ const AdminLogin = () => {
           {
             headers: {
               "Content-Type": "application/json",
+              'Authorization': `${apiKey}`
             },
           }
         );

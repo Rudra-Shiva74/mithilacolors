@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import "./SignUp.css";
 
 const SignUp = () => {
+  const apiKey = process.env.REACT_APP_API_KEY;
   const apiUrl = process.env.REACT_APP_API_URL;
   const [formData, setFormData] = useState({
     name: "",
@@ -49,12 +50,12 @@ const SignUp = () => {
           formData,
           {
             headers: {
-              "Content-Type": "application/json",
+              "Content-Type": "application/json", 'Authorization': `${apiKey}`
             },
           }
         );
         console.log(response);
-        if(response.status===200){
+        if (response.status === 200) {
           toast.success(`${response.data}`, {
             position: "top-center",
             autoClose: 504,
@@ -65,11 +66,11 @@ const SignUp = () => {
             progress: undefined,
             theme: "light",
           });
-          setTimeout(()=>{
+          setTimeout(() => {
             navigate('/Login');
-          },1000);
+          }, 1000);
         }
-        else{
+        else {
           toast.error(`${response.data}`, {
             position: "top-center",
             autoClose: 504,

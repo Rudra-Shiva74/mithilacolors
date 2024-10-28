@@ -1,5 +1,7 @@
 import express from 'express'
 const app = express();
+import dotenv from 'dotenv';
+dotenv.config();
 import multer from 'multer';
 import path from 'path';
 import cors from 'cors';
@@ -12,7 +14,7 @@ import { fileURLToPath } from 'url';
 const jwtKey = 'e-comm';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
+const apiKey = process.env.REACT_APP_API_KEY;
 // Configure Multer storage
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -46,7 +48,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // });
 
 //user registration
-app.post("/api/user_register", async (req, resp) => {
+app.post("/api/user_register", verifyToken, async (req, resp) => {
     try {
         var userExists = await userModel.countDocuments({ email: req.body.email }); // Use countDocuments
         if (userExists === 1) {
@@ -63,7 +65,7 @@ app.post("/api/user_register", async (req, resp) => {
 });
 
 //list of user
-app.get("/api/user_list", async (req, resp) => {
+app.get("/api/user_list", verifyToken, async (req, resp) => {
     try {
         let product = await userModel.find();
         resp.send(product);
@@ -73,7 +75,7 @@ app.get("/api/user_list", async (req, resp) => {
 })
 
 //delete user
-app.delete('/api/user/:id', async (req, resp) => {
+app.delete('/api/user/:id', verifyToken, async (req, resp) => {
     console.log(req.params)
     try {
         const res = await userModel.deleteOne({ _id: req.params.id })
@@ -84,7 +86,7 @@ app.delete('/api/user/:id', async (req, resp) => {
 })
 
 //user login
-app.post("/api/user_login", async (req, resp) => {
+app.post("/api/user_login", verifyToken, async (req, resp) => {
     try {
         const res = await userModel.findOne({ $and: [{ email: req.body.email }, { password: req.body.password }] }).select({ password: 0 });
         if (res) {
@@ -100,7 +102,7 @@ app.post("/api/user_login", async (req, resp) => {
 })
 
 //admin login
-app.post("/api/admin_register", async (req, resp) => {
+app.post("/api/admin_register", verifyToken, async (req, resp) => {
     try {
         var userExists = await Admin.countDocuments({ email: req.body.email }); // Use countDocuments
         if (userExists === 1) {
@@ -117,7 +119,7 @@ app.post("/api/admin_register", async (req, resp) => {
 });
 
 //admin registration
-app.post("/api/admin_login", async (req, resp) => {
+app.post("/api/admin_login", verifyToken, async (req, resp) => {
     try {
         const res = await Admin.findOne({ $and: [{ email: req.body.email }, { password: req.body.password }] }).select({ password: 0 });
         if (res) {
@@ -133,7 +135,7 @@ app.post("/api/admin_login", async (req, resp) => {
 })
 
 //add product
-app.post("/api/add_product", upload.array('files', 5), async (req, resp) => {
+app.post("/api/add_product", verifyToken, upload.array('files', 5), async (req, resp) => {
     req.body.image = req.files;
     try {
         var newProduct = new productModel(req.body);
@@ -146,7 +148,7 @@ app.post("/api/add_product", upload.array('files', 5), async (req, resp) => {
 });
 
 //list of product
-app.get("/api/product", async (req, resp) => {
+app.get("/api/product", verifyToken, async (req, resp) => {
     try {
         let product = await productModel.find();
         resp.send(product);
@@ -156,7 +158,7 @@ app.get("/api/product", async (req, resp) => {
 })
 
 // delete product
-app.delete('/api/product/:id', async (req, resp) => {
+app.delete('/api/product/:id', verifyToken, async (req, resp) => {
     try {
         const res = await productModel.deleteOne({ _id: req.params.id })
         resp.send(res);
@@ -166,7 +168,7 @@ app.delete('/api/product/:id', async (req, resp) => {
 })
 
 //get only one product
-app.get('/api/product/:id', async (req, resp) => {
+app.get('/api/product/:id', verifyToken, async (req, resp) => {
     try {
         const res = await productModel.findOne({ _id: req.params.id })
         resp.send(res);
@@ -186,7 +188,7 @@ app.put('api/product/:id', verifyToken, async (req, resp) => {
 })
 
 //add to card
-app.post("/api/addtocard", async (req, resp) => {
+app.post("/api/addtocard", verifyToken, async (req, resp) => {
     try {
         const { email, pid } = req.body.cart; // Destructure the incoming data
 
@@ -218,7 +220,7 @@ app.post("/api/addtocard", async (req, resp) => {
 });
 
 //check product added or not in cart
-app.post('/api/checktocart', async (req, resp) => {
+app.post('/api/checktocart', verifyToken, async (req, resp) => {
     try {
         const res = await usercardModel.findOne({ email: req.body.cart.email });
         if (res) {
@@ -232,7 +234,7 @@ app.post('/api/checktocart', async (req, resp) => {
 })
 
 // remove from cart
-app.post('/api/removetocard', async (req, resp) => {
+app.post('/api/removetocard', verifyToken, async (req, resp) => {
     try {
         const { email, pid } = req.body.cart;
         const user = await usercardModel.findOne({ email });
@@ -258,7 +260,7 @@ app.post('/api/removetocard', async (req, resp) => {
 
 
 //get user add to cart data
-app.get('/api/getcartdetails/:id', async (req, res) => {
+app.get('/api/getcartdetails/:id', verifyToken, async (req, res) => {
     try {
         // Assuming user's email is in the session
         const userEmail = req.params.id;
@@ -283,14 +285,21 @@ app.get('/api/getcartdetails/:id', async (req, res) => {
 //jwt token verify
 function verifyToken(req, resp, next) {
     const token = req.headers.authorization;
+    console.log(apiKey)
     if (token) {
-        Jwt.verify(token, jwtKey, (err, valid) => {
-            if (err) {
-                resp.status(400).send("Invalid JWT Token");
-            } else {
-                next();
-            }
-        })
+        if (apiKey === token) {
+            next();
+        }
+        else {
+            resp.status(400).send("Invalid JWT Token");
+        }
+        // Jwt.verify(token, jwtKey, (err, valid) => {
+        //     if (err) {
+        //         resp.status(400).send("Invalid JWT Token");
+        //     } else {
+        //         next();
+        //     }
+        // })
     }
     else {
         resp.status(401).send("Please Add Token");
