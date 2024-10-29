@@ -23,7 +23,8 @@ const Addtocart = () => {
           'Authorization': `${apiKey}`
         }
       });
-      setCaart(resp.data.pid);
+      console.log(resp.data.product)
+      setCaart(resp.data.product);
     } catch (error) {
     }
   };
@@ -54,20 +55,22 @@ const Addtocart = () => {
               <th className={styles.th}>Fabric</th>
               <th className={styles.th}>Fabric Color</th>
               <th className={styles.th}>Theme Color</th>
+              <th className={styles.th}>Quantity</th>
               <th className={styles.th}>Action</th>
             </tr>
           </thead>
           <tbody>
             {caart.map((user) => (
               <tr key={user.id} className={styles.row}>
-                <td className={styles.td}>{user.clothing_type}</td>
-                <td className={styles.td}>{user.theme}</td>
-                <td className={styles.td}>{user.fabric}</td>
-                <td className={styles.td}>{user.fabric_color}</td>
-                <td className={styles.td}>{user.theme_color}</td>
+                <td className={styles.td}>{user.pid.clothing_type}</td>
+                <td className={styles.td}>{user.pid.theme}</td>
+                <td className={styles.td}>{user.pid.fabric}</td>
+                <td className={styles.td}>{user.pid.fabric_color}</td>
+                <td className={styles.td}>{user.pid.theme_color}</td>
+                <td className={styles.td}>{user.quantity}</td>
                 <td className={styles.td}>
                   <i className={`fa fa-trash ${styles.deleteButton}`} aria-hidden="true" onClick={() => removeProduct(user._id)}></i>
-                  <Link to={`/AboutProduct/${user._id}`} ><i className={`fa fa-eye ${styles.deleteButton}`} aria-hidden="true"></i></Link>
+                  <Link to={`/AboutProduct/${user.pid._id}`} ><i className={`fa fa-eye ${styles.deleteButton}`} aria-hidden="true"></i></Link>
                 </td>
               </tr>
             ))}

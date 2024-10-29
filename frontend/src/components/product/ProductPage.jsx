@@ -6,12 +6,15 @@ import { Link } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { isAdminLogin, isUserLogin } from '../Auth/Logincheck.js'
+import { incrementproduct } from "../../redux/addtocart/CounterSlice.jsx";
+import { useSelector, useDispatch } from 'react-redux'
 const ProductPage = () => {
   const apiKey = process.env.REACT_APP_API_KEY;
   const apiUrl = process.env.REACT_APP_API_URL;
   const imgUrl = process.env.REACT_APP_IMG_URL;
   const navigate = useNavigate();
   const param = useParams();
+  const dispatch = useDispatch()
   const [imageOptions, setImageOptions] = useState([]);
   const [currentimg, setCurrentimg] = useState();
   const [product, setProduct] = useState({});
@@ -94,7 +97,7 @@ const ProductPage = () => {
           'Authorization': `${apiKey}`
         },
       })
-      console.log(resp)
+      dispatch(incrementproduct(1));
       // }
     }
     fetchdata();

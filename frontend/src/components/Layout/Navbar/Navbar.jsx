@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom"; // Import useNavigate
 import logo from "../img/logooo.png";
+import { useSelector, useDispatch } from 'react-redux'
 import { isAdminLogin, isUserLogin } from "../../Auth/Logincheck";
-
+import { incrementproduct } from "../../../redux/addtocart/CounterSlice";
+import axios from "axios";
 const Navbar = () => {
+  const apiKey = process.env.REACT_APP_API_KEY;
+  const apiUrl = process.env.REACT_APP_API_URL;
+  const count = useSelector((state) => state.counter.value)
+  const [cartdata, setCartdata] = useState(0);
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate(); // Initialize navigate
-
+  const dispatch = useDispatch()
   const toggleSidebar = () => {
     setSidebarOpen(!isSidebarOpen);
   };
@@ -23,10 +29,24 @@ const Navbar = () => {
   };
 
   useEffect(() => {
+    fetchProductsCount();
     isAdminLogin();
     isUserLogin();
-  }, []);
-
+  }, [1, 2]);
+  const fetchProductsCount = async () => {
+    try {
+      const resp = await axios.post(`${apiUrl}checktocart`, { email: isUserLogin() && isUserLogin().email }, {
+        headers: {
+          'Authorization': `${apiKey}`
+        }
+      });
+      let data = 0; // Initialize as a number
+      data += resp.data.product.reduce((sum, element) => sum + Number(element.quantity), 0);
+      dispatch(incrementproduct(data));
+    } catch (error) {
+      console.log(error)
+    }
+  }
   return (
     <div>
       {/* Mobile Sidebar */}
@@ -206,7 +226,7 @@ const Navbar = () => {
               {isAdminLogin() ? '' :
                 <li className="nav-item">
                   <Link className="nav-link" to="/user/Addtocard">
-                    <span className="item-count">2</span>
+                    <span className="item-count">{count}</span>
                     <i className="fa fa-cart-plus" aria-hidden="true"></i> Cards
                   </Link>
                 </li>}
