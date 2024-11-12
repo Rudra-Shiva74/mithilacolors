@@ -149,6 +149,7 @@ app.post("/api/add_product", verifyToken, upload.array('files', 5), async (req, 
 
 //list of product
 app.get("/api/product", async (req, resp) => {
+    console.log(req.headers)
     try {
         let product = await productModel.find();
         resp.send(product);
