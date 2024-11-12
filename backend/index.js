@@ -148,7 +148,7 @@ app.post("/api/add_product", verifyToken, upload.array('files', 5), async (req, 
 });
 
 //list of product
-app.get("/api/product", verifyToken, async (req, resp) => {
+app.get("/api/product", async (req, resp) => {
     try {
         let product = await productModel.find();
         resp.send(product);
@@ -225,7 +225,7 @@ app.post("/api/addtocard", verifyToken, async (req, resp) => {
 //check product added or not in cart
 app.post('/api/checktocart', verifyToken, async (req, resp) => {
     try {
-        const res = await usercardModel.findOne({ email: req.body.cart.email });
+        const res = await usercardModel.findOne({ email: req.body.email });
         if (res) {
             resp.send(res)
         } else {
