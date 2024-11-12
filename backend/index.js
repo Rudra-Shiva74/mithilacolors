@@ -28,7 +28,9 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: "https://mithilacolors.vercel.app"
+}));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 //upload single file
