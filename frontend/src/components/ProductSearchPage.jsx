@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 
 const ProductSearchPage = () => {
   const apiKey = process.env.REACT_APP_API_KEY;
+  const imgUrl = process.env.REACT_APP_IMG_URL;
   const apiUrl = process.env.REACT_APP_API_URL;
   const [selectedTheme, setSelectedTheme] = useState(null);
   const [selectedClothing_type, setSelectedClothing_type] = useState(null);
@@ -180,7 +181,7 @@ const ProductSearchPage = () => {
                 className={styles.productCard}
               >
                 <img
-                  src={`http://localhost:8000/${product.image[0].path}`}
+                  src={`${imgUrl + product.image[0].path}`}
                   alt={product.name}
                   className={styles.productImage}
                 />
